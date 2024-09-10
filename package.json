@@ -1,0 +1,24 @@
+{
+  "name": "dompet.webview",
+  "version": "1.0.0",
+  "description": "A Webview SDK of Dompet App",
+  "author": "lin pengteng <china.linpengteng@gmail.com>",
+  "license": "Apache License 2.0",
+  "scripts": {
+    "clean:dist": "shx rm -rf dist",
+    "mkdir:flutter": "mkdir -p dist/flutter",
+    "mkdir:harmony": "mkdir -p dist/harmony",
+    "refer:flutter": "cp -r refer/* dist/flutter",
+    "refer:harmony": "cp -r refer/* dist/harmony",
+    "build:flutter": "terser src/flutter.js -o dist/flutter/flutter.min.js --compress --mangle",
+    "build:harmony": "terser src/harmony.js -o dist/harmony/harmony.min.js --compress --mangle",
+    "build:webview.flutter": "terser src/webview.js -o dist/flutter/webview.min.js --compress --mangle",
+    "build:webview.harmony": "terser src/webview.js -o dist/harmony/webview.min.js --compress --mangle",
+    "build": "npm-run-all -s clean:dist mkdir:* refer:* -p build:*"
+  },
+  "dependencies": {
+    "npm-run-all": "^4.1.5",
+    "shx": "^0.3.4",
+    "terser": "^5.32.0"
+  }
+}
