@@ -93,7 +93,7 @@
     })
     controlApp.addEventListener('click', function (e) {
       if (core.invoker.navigateBack) {
-        core.invoker.navigateBack({ delta: 99 })
+        core.invoker.navigateBack({ delta: 999 })
       }
     })
 
@@ -104,7 +104,7 @@
     document.body.appendChild(controlContainer)
   }
 
-  var initFlutterApiHandler = function () {
+  var injectFlutterWebApi = function () {
     var source = core.source
     var invoker = core.invoker
 
@@ -125,23 +125,20 @@
             }, timeout)
           }
 
-          return fn(options)
+          fn(options)
+            .then(resolve)
+            .catch(reject)
         })
       }
     }
 
-    try { var reLaunch = promisify(source.program.reLaunch.bind(program), 60000) } catch (e) {}
-    try { var switchTab = promisify(source.program.switchTab.bind(program), 60000) } catch (e) {}
-    try { var redirectTo = promisify(source.program.redirectTo.bind(program), 60000) } catch (e) {}
-    try { var navigateTo = promisify(source.program.navigateTo.bind(program), 60000) } catch (e) {}
-    try { var navigateBack = promisify(source.program.navigateBack.bind(program), 60000) } catch (e) {}
+    try { var reLaunch = promisify(source.program.reLaunch, 60000) } catch (e) {}
+    try { var redirectTo = promisify(source.program.redirectTo, 60000) } catch (e) {}
+    try { var navigateTo = promisify(source.program.navigateTo, 60000) } catch (e) {}
+    try { var navigateBack = promisify(source.program.navigateBack, 60000) } catch (e) {}
 
     invoker.reLaunch = function (options) {
       return reLaunch({ page: options.page })
-    }
-
-    invoker.switchTab = function (options) {
-      return switchTab({ page: options.page })
     }
 
     invoker.redirectTo = function (options) {
@@ -152,76 +149,86 @@
       return navigateTo({ page: options.page })
     }
 
-    invoker.navigateBack = function (options) {
+    invoker.navigateBack = async function (options) {
       return navigateBack({ delta: options.delta })
     }
   }
 
-  var injectCoreHandler = function () {
+  var initSDKEnvironment = function () {
+    var callback = arguments[0]
+    var harmonySourcer = window.injectHarmonyAppSourcer
+    var flutterSourcer = window.injectFlutterAppSourcer
+
+    if (flutterSourcer && flutterSourcer.ready === true) {
+      delete window.injectFlutterAppSourcer
+      delete window.injectFlutterAppRunner
+      window[core.operate] = core.invoker
+
+      core.invoker.ready = Promise.resolve({ 
+        status: 'success', 
+        message: null, 
+        result: null 
+      })
+      
+      core.source = flutterSourcer.source
+      core.name = flutterSourcer.name
+      core.env = flutterSourcer.env
+      callback()
+      return
+    }
+
+    if (flutterSourcer && flutterSourcer.ready === false) {
+      var success = null
+
+      core.invoker.ready = new Promise((resolve, reject) => {
+        setTimeout(function () { reject({ status: 'failure', message: 'flutter sdk loading timeout', result: null }) }, 8000)
+        success = resolve
+      })
+
+      window.injectFlutterAppRunner = function (result) {
+        delete window.injectFlutterAppSourcer
+        delete window.injectFlutterAppRunner
+        window[core.operate] = core.invoker
+        core.source = result.source
+        core.name = result.name
+        core.env = result.env
+        callback()
+        success()
+        return
+      }
+    }
+  }
+
+  var initSDKServicer = function () {
     switch (core.name) {
       case 'jflutter': {
-        initFlutterApiHandler()
+        injectFlutterWebApi()
         break
       }
     }
   }
 
-  var injectFlutterSDK = function () {
-    var callback = arguments[0]
-
-    if (
-      typeof window.injectFlutterAppSourcer === 'object' &&
-      window.injectFlutterAppSourcer.flutter === true &&
-      window.injectFlutterAppSourcer.ready === true
-    ) {
-      window.injectFlutterAppSourcer.program.ready(function (result) {
-        core.env = result.env
-        core.name = result.name
-        core.source = result.source
-        core.version = result.version
-        callback()
-      })
-      return
-    }
-
-    window.injectFlutterAppRunner = function (result) {
-      core.env = result.env
-      core.name = result.name
-      core.source = result.source
-      core.version = result.version
-      callback()
-    }
-  }
-
-  var initSDKProxyer = function () {
-    window[core.operate] = core.invoker
-  }
-
-  var initSDKInvoker = function () {
+  var initialize = function () {
     if (window[core.operate]) {
       return
     }
     
-    injectFlutterSDK(function () {
-      if (window.parent === window) {
-        injectControlStyle()
-        injectControlElement()
-        injectCoreHandler()
-        initSDKProxyer()
+    initSDKEnvironment(function () {
+      if (window.parent !== window) {
+        initSDKServicer()
+        return
       }
 
-      if (window.parent !== window) {
-        injectCoreHandler()
-        initSDKProxyer()
-      }
+      initSDKServicer()
+      injectControlStyle()
+      injectControlElement()
     })
   }
 
-  initSDKInvoker()
+  initialize()
 })({
   env: '',
   name: '',
-  version: '',
   operate: 'Dompet',
   invoker: {},
   source: {},
