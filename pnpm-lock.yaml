@@ -15,8 +15,8 @@ importers:
         specifier: ^0.3.4
         version: 0.3.4
       terser:
-        specifier: ^5.33.0
-        version: 5.33.0
+        specifier: ^5.34.0
+        version: 5.34.0
 
 packages:
 
@@ -194,8 +194,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  terser@5.33.0:
-    resolution: {integrity: sha512-JuPVaB7s1gdFKPKTelwUyRq5Sid2A3Gko2S0PncwdBq7kN9Ti9HPWDQ06MPsEDGsZeVESjKEnyGy68quBk1w6g==}
+  terser@5.34.0:
+    resolution: {integrity: sha512-y5NUX+U9HhVsK/zihZwoq4r9dICLyV2jXGOriDAVOeKhq3LKVjgJbGO90FisozXLlJfvjHqgckGmJFBb9KYoWQ==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -371,7 +371,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  terser@5.33.0:
+  terser@5.34.0:
     dependencies:
       '@jridgewell/source-map': 0.3.6
       acorn: 8.12.1
