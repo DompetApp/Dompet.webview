@@ -17,7 +17,7 @@
     "build": "npm-run-all -s clean:dist mkdir:* refer:* -p build:*"
   },
   "dependencies": {
-    "npm-run-all2": "^6.2.4",
+    "npm-run-all2": "^7.0.1",
     "shx": "^0.3.4",
     "terser": "^5.36.0"
   }
