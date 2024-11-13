@@ -1,5 +1,5 @@
 ;(function (source) {
-  ;function initialize (source) {
+  function initialize(source) {
     window.addEventListener('harmonyInAppWebViewPlatformReady', () => {
       source.handler = window.harmony_webview.callHandler
       source.runner = window.injectHarmonyAppRunner
@@ -19,13 +19,13 @@
         source.runner({
           env: env,
           name: name,
-          source: source
+          source: source,
         })
       }
     })
   }
 
-  ;function generate (source) {
+  function generate(source) {
     source.program.reLaunch = function (options) {
       return source.handler('ToJavaScriptHandler', 'CallReLaunch', options)
     }
@@ -46,12 +46,12 @@
   initialize(source)
   generate(source)
 })(
-  window.injectHarmonyAppSourcer = {
+  (window.injectHarmonyAppSourcer = {
     env: 'harmony',
     name: 'jharmony',
     program: Object.create(null),
     handler: undefined,
     runner: undefined,
-    ready: false
-  }
+    ready: false,
+  })
 )

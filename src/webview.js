@@ -1,13 +1,19 @@
 ;(function (core) {
   var injectControlStyle = function () {
-    document.head.appendChild(injectCreateElement('style', { type: 'text/css' }, [
-      'html, body { padding: 0 !important; margin: 0 !important; }',
-      '#_inject__control-container { display: block; position: fixed; bottom: 66px; right: 0; z-index: 9999; opacity: .95 }',
-      '#_inject__control-content { display: block; width: 74px; height: 74px; position: relative; }',
-      '#_inject__control-app { display: block; width: 74px; height: 74px; position: absolute; }',
-      '#_inject__control-app { top: 0; left: 0; right: 0; bottom: 0; margin: auto; }',
-      '#_inject__control-app-img { width: 74px; height: 74px; }'
-    ].join('\n')))
+    document.head.appendChild(
+      injectCreateElement(
+        'style',
+        { type: 'text/css' },
+        [
+          'html, body { padding: 0 !important; margin: 0 !important; }',
+          '#_inject__control-container { display: block; position: fixed; bottom: 66px; right: 0; z-index: 9999; opacity: .95 }',
+          '#_inject__control-content { display: block; width: 74px; height: 74px; position: relative; }',
+          '#_inject__control-app { display: block; width: 74px; height: 74px; position: absolute; }',
+          '#_inject__control-app { top: 0; left: 0; right: 0; bottom: 0; margin: auto; }',
+          '#_inject__control-app-img { width: 74px; height: 74px; }',
+        ].join('\n')
+      )
+    )
   }
 
   var injectCreateElement = function () {
@@ -16,7 +22,9 @@
     var text = arguments[2]
 
     if (object) {
-      for (var field in object) { element.setAttribute(field, object[field]) }
+      for (var field in object) {
+        element.setAttribute(field, object[field])
+      }
     }
 
     if (text) {
@@ -30,9 +38,16 @@
     var image = 'https://linpengteng.github.io/resource/dompet-app/home.png'
 
     var controlApp = injectCreateElement('div', { id: '_inject__control-app' })
-    var controlContent = injectCreateElement('div', { id: '_inject__control-content' })
-    var controlContainer = injectCreateElement('div', { id: '_inject__control-container' })
-    var controlAppImg = injectCreateElement('img', { id: '_inject__control-app-img', src: image })
+    var controlContent = injectCreateElement('div', {
+      id: '_inject__control-content',
+    })
+    var controlContainer = injectCreateElement('div', {
+      id: '_inject__control-container',
+    })
+    var controlAppImg = injectCreateElement('img', {
+      id: '_inject__control-app-img',
+      src: image,
+    })
 
     var isTouch = false
     var startOffsetX = null
@@ -110,8 +125,8 @@
 
     var promisify = function (fn, timeout) {
       return function (options) {
-        if (options.timeout >= 0) { 
-          timeout = options.timeout 
+        if (options.timeout >= 0) {
+          timeout = options.timeout
         }
 
         return new Promise(function (resolve, reject) {
@@ -120,22 +135,31 @@
               reject({
                 status: 'failure',
                 message: 'failure: timeout',
-                result: null
+                result: null,
               })
             }, timeout)
           }
 
-          fn(options)
-            .then(resolve)
-            .catch(reject)
+          fn(options).then(resolve).catch(reject)
         })
       }
     }
 
-    try { var reLaunch = promisify(source.program.reLaunch, 60000) } catch (e) {}
-    try { var redirectTo = promisify(source.program.redirectTo, 60000) } catch (e) {}
-    try { var navigateTo = promisify(source.program.navigateTo, 60000) } catch (e) {}
-    try { var navigateBack = promisify(source.program.navigateBack, 60000) } catch (e) {}
+    try {
+      var reLaunch = promisify(source.program.reLaunch, 60000)
+    } catch (e) {}
+
+    try {
+      var redirectTo = promisify(source.program.redirectTo, 60000)
+    } catch (e) {}
+
+    try {
+      var navigateTo = promisify(source.program.navigateTo, 60000)
+    } catch (e) {}
+
+    try {
+      var navigateBack = promisify(source.program.navigateBack, 60000)
+    } catch (e) {}
 
     invoker.reLaunch = function (options) {
       return reLaunch({ page: options.page })
@@ -164,12 +188,12 @@
       delete window.injectFlutterAppRunner
       window[core.operate] = core.invoker
 
-      core.invoker.ready = Promise.resolve({ 
-        status: 'success', 
-        message: null, 
-        result: null 
+      core.invoker.ready = Promise.resolve({
+        status: 'success',
+        message: null,
+        result: null,
       })
-      
+
       core.source = flutterSourcer.source
       core.name = flutterSourcer.name
       core.env = flutterSourcer.env
@@ -181,7 +205,13 @@
       var success = null
 
       core.invoker.ready = new Promise((resolve, reject) => {
-        setTimeout(function () { reject({ status: 'failure', message: 'flutter sdk loading timeout', result: null }) }, 8000)
+        setTimeout(function () {
+          reject({
+            status: 'failure',
+            message: 'flutter sdk loading timeout',
+            result: null,
+          })
+        }, 8000)
         success = resolve
       })
 
@@ -212,7 +242,7 @@
     if (window[core.operate]) {
       return
     }
-    
+
     initSDKEnvironment(function () {
       if (window.parent !== window) {
         initSDKServicer()

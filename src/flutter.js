@@ -1,5 +1,5 @@
 ;(function (source) {
-  ;function initialize (source) {
+  function initialize(source) {
     window.addEventListener('flutterInAppWebViewPlatformReady', () => {
       source.handler = window.flutter_inappwebview.callHandler
       source.runner = window.injectFlutterAppRunner
@@ -19,13 +19,13 @@
         source.runner({
           env: env,
           name: name,
-          source: source
+          source: source,
         })
       }
     })
   }
 
-  ;function generate (source) {
+  function generate(source) {
     source.program.reLaunch = function (options) {
       return source.handler('ToJavaScriptHandler', 'CallReLaunch', options)
     }
@@ -46,12 +46,12 @@
   initialize(source)
   generate(source)
 })(
-  window.injectFlutterAppSourcer = {
+  (window.injectFlutterAppSourcer = {
     env: 'flutter',
     name: 'jflutter',
     program: Object.create(null),
     handler: undefined,
     runner: undefined,
-    ready: false
-  }
+    ready: false,
+  })
 )

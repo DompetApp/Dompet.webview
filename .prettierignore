@@ -1,0 +1,12 @@
+# ignore prettier files
+.gitignore
+*.svg
+*.ico
+*.md
+*.log
+*.lock
+
+/dist/*
+/refer/*
+/node_modules/*
+/*.d.ts
