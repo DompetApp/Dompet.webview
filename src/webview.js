@@ -5,7 +5,8 @@
         'style',
         { type: 'text/css' },
         [
-          'html, body { padding: 0 !important; margin: 0 !important; }',
+          'html, body { padding: 0; margin: 0; }',
+          'body img { max-width: 100%; height: auto; }',
           '#_inject__control-container { display: block; position: fixed; bottom: 66px; right: 0; z-index: 9999; opacity: .95 }',
           '#_inject__control-content { display: block; width: 74px; height: 74px; position: relative; }',
           '#_inject__control-app { display: block; width: 74px; height: 74px; position: absolute; }',
