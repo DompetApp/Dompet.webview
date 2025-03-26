@@ -83,8 +83,8 @@
       source.runner = window.injectFlutterBridgeRunner
       source.ready = true
 
+      delete window.flutter_inappwebview.callHandler
       delete window.injectFlutterBridgeRunner
-      delete window.flutter_inappwebview
       Object.freeze(source.program)
       Object.freeze(source.handler)
       Object.freeze(source.runner)
