@@ -269,7 +269,28 @@
       return
     }
 
-    if (!flutterSourcer || flutterSourcer.ready !== true) {
+    if (harmonySourcer && harmonySourcer.ready === true) {
+      delete window.injectHarmonyBridgeSourcer
+      delete window.injectHarmonyBridgeRunner
+      window[core.operate] = core.invoker
+
+      core.invoker.ready = Promise.resolve({
+        status: 'success',
+        message: null,
+        result: {
+          name: harmonySourcer.name,
+          env: harmonySourcer.env,
+        },
+      })
+
+      core.source = harmonySourcer
+      core.name = harmonySourcer.name
+      core.env = harmonySourcer.env
+      callback()
+      return
+    }
+
+    if (flutterSourcer || flutterSourcer.ready !== true) {
       var success = null
 
       core.invoker.ready = new Promise((resolve, reject) => {
@@ -299,32 +320,12 @@
           },
         })
         callback()
-        return
       }
-    }
 
-    if (harmonySourcer && harmonySourcer.ready === true) {
-      delete window.injectHarmonyBridgeSourcer
-      delete window.injectHarmonyBridgeRunner
-      window[core.operate] = core.invoker
-
-      core.invoker.ready = Promise.resolve({
-        status: 'success',
-        message: null,
-        result: {
-          name: harmonySourcer.name,
-          env: harmonySourcer.env,
-        },
-      })
-
-      core.source = harmonySourcer
-      core.name = harmonySourcer.name
-      core.env = harmonySourcer.env
-      callback()
       return
     }
 
-    if (!harmonySourcer || harmonySourcer.ready !== true) {
+    if (harmonySourcer || harmonySourcer.ready !== true) {
       var success = null
 
       core.invoker.ready = new Promise((resolve, reject) => {
@@ -354,8 +355,9 @@
           },
         })
         callback()
-        return
       }
+
+      return
     }
   }
 
