@@ -290,7 +290,7 @@
       return
     }
 
-    if (flutterSourcer || flutterSourcer.ready !== true) {
+    if (flutterSourcer && flutterSourcer.ready !== true) {
       var success = null
 
       core.invoker.ready = new Promise((resolve, reject) => {
@@ -325,7 +325,7 @@
       return
     }
 
-    if (harmonySourcer || harmonySourcer.ready !== true) {
+    if (harmonySourcer && harmonySourcer.ready !== true) {
       var success = null
 
       core.invoker.ready = new Promise((resolve, reject) => {
