@@ -78,29 +78,27 @@
   }
 
   ;function generate(source) {
-    window.addEventListener('flutterInAppWebViewPlatformReady', () => {
-      source.handler = window.flutter_inappwebview.callHandler.bind(window.flutter_inappwebview)
-      source.runner = window.injectFlutterBridgeRunner
-      source.ready = true
+    source.handler = window.flutter_inappwebview.callHandler.bind(window.flutter_inappwebview)
+    source.runner = window.injectFlutterBridgeRunner
+    source.ready = true
 
-      delete window.flutter_inappwebview.callHandler
-      delete window.injectFlutterBridgeRunner
-      Object.freeze(source.program)
-      Object.freeze(source.handler)
-      Object.freeze(source.runner)
-      Object.freeze(source)
+    delete window.flutter_inappwebview.callHandler
+    delete window.injectFlutterBridgeRunner
+    Object.freeze(source.program)
+    Object.freeze(source.handler)
+    Object.freeze(source.runner)
+    Object.freeze(source)
 
-      if (typeof source.runner === 'function') {
-        var env = source.env
-        var name = source.name
+    if (typeof source.runner === 'function') {
+      var env = source.env
+      var name = source.name
 
-        source.runner({
-          env: env,
-          name: name,
-          source: source,
-        })
-      }
-    })
+      source.runner({
+        env: env,
+        name: name,
+        source: source,
+      })
+    }
   }
 
   initialize(source)
