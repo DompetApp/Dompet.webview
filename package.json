@@ -8,13 +8,13 @@
     "clean:dist": "shx rm -rf dist",
     "mkdir:flutter": "mkdir -p dist/flutter",
     "mkdir:harmony": "mkdir -p dist/harmony",
-    "refer:flutter": "cp -r refer/* dist/flutter",
-    "refer:harmony": "cp -r refer/* dist/harmony",
+    "cache:flutter": "cp -r cache/* dist/flutter",
+    "cache:harmony": "cp -r cache/* dist/harmony",
     "build:flutter": "terser src/flutter.js -o dist/flutter/flutter.min.js --compress --mangle",
     "build:harmony": "terser src/harmony.js -o dist/harmony/harmony.min.js --compress --mangle",
     "build:webview.flutter": "terser src/webview.js -o dist/flutter/webview.min.js --compress --mangle",
     "build:webview.harmony": "terser src/webview.js -o dist/harmony/webview.min.js --compress --mangle",
-    "build": "npm-run-all -s clean:dist mkdir:* refer:* -p build:*"
+    "build": "npm-run-all -s clean:dist mkdir:* cache:* -p build:*"
   },
   "dependencies": {
     "npm-run-all2": "^8.0.4",
